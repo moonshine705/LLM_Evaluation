@@ -1,0 +1,66 @@
+import streamlit as st
+import os
+import groq as Groq
+
+os.environ["GROQ_API_KEY"] = "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"
+client = Groq()
+
+st.title("LLM Evaluation")
+
+st.write("Enter your prompt below:")
+prompt = st.text_area("Prompt", height=100)
+
+st.write("Select your LLM:")
+llm_choice = st.selectbox("Select a model", ["Llama3.3", "Gemma2", "Mixtral"])
+
+if st.button("Submit"):
+  if llm_choice == "Mixtral":
+      mixtral_completion = client.chat.completions.create(
+          messages=[
+              {
+                  "role": "system",
+                  "content": "you are a math tutor."
+              },
+              model
+                  "role": "user",
+                  "content": prompt,
+              }
+          ],
+          model="mixtral-8x7b-32768",
+      )
+      st.write("\nMixtral-8x7b-32768 response:", mixtral_completion.choices[0].message.content)
+  elif llm_choice == "Gemma2":
+      gemma_completion = client.chat.completions.create(
+          messages=[
+              {
+                  "role": "system",
+                  "content": "you are a math tutor."
+              },
+              {
+                  "role": "user",
+                  "content": prompt,
+              }
+          ],
+          model="gemma2-9b-it", 
+      )
+      st.write("\nGemma2-9b-it response:", gemma_completion.choices[0].message.content)
+  elif llm_choice == "Llama":
+      chat_completion = client.chat.completions.create(
+          messages=[
+              {
+                  "role": "system",
+                  "content": "you are a math tutor."
+              },
+              {
+                  "role": "user",
+                  "content": prompt,
+              }
+          ],
+          model="llama-3.3-70b-versatile",
+      )
+      st.write("\nllama-3.3-70b response:",chat_completion.choices[0].message.content)
+  else:
+      # Replace this with your evaluation code for other LLMs
+      st.write(f"You chose {llm_choice} with the prompt: {prompt}")
+      st.write("Evaluating...")
+      st.write(f"Response from {llm_choice}: [Insert LLM Response]")
